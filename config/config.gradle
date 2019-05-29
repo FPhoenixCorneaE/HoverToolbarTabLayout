@@ -1,0 +1,24 @@
+ext {
+
+    android = [
+            compileSdkVersion: 28,
+            buildToolsVersion: "28.0.3",
+            minSdkVersion    : 17,
+            targetSdkVersion : 28,
+    ]
+
+    dependenceVersion = [
+            support: "28.0.0",
+    ]
+
+    support = [
+            supportv4   : "com.android.support:support-v4:$dependenceVersion.support",
+            appcompat   : "com.android.support:appcompat-v7:$dependenceVersion.support",
+            design      : "com.android.support:design:$dependenceVersion.support",
+            recyclerview: "com.android.support:recyclerview-v7:$dependenceVersion.support",
+            cardview    : "com.android.support:cardview-v7:$dependenceVersion.support",
+    ]
+
+    /*依赖这个，相当于依赖support下所有项*/
+    supportLibs = support.values()
+}
