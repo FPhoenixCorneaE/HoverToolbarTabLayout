@@ -1,8 +1,10 @@
 package com.wkz.hover;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -12,6 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.wkz.hover.immersionbar.BarHide;
+import com.wkz.hover.immersionbar.ImmersionBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,20 +54,27 @@ public class MainActivity extends AppCompatActivity {
         mAblAppBar = (AppBarLayout) findViewById(R.id.ablAppBar);
         mTlTab = (TabLayout) findViewById(R.id.tlTab);
         mVpPager = (ViewPager) findViewById(R.id.vpPager);
-        mTbToolbar = (Toolbar) findViewById(R.id.tb_toolbar);
+        mTbToolbar = (Toolbar) findViewById(R.id.tbToolbar);
     }
 
     private void initListener() {
         mAblAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                float alpha = Math.abs(verticalOffset) * 1.0F / (mAblAppBar.getHeight() - mTbToolbar.getHeight());
-                setToolbarAlpha(alpha);
+                float alpha = Math.abs(verticalOffset) * 1.0F / (mAblAppBar.getHeight() - mTbToolbar.getHeight() - StatusBarTools.getStatusBarHeight(MainActivity.this));
+                setToolbarBackgroundColor(alpha);
+                setStatusBarColor(alpha);
             }
         });
     }
 
-    private void setToolbarAlpha(float alpha) {
+    private void setStatusBarColor(float alpha) {
+        ImmersionBar.with(this)
+                .statusBarColor(getGradientOverlayColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark), alpha > 1 ? 1 : alpha))
+                .init();
+    }
+
+    private void setToolbarBackgroundColor(float alpha) {
         mTbToolbar.setBackgroundColor(getGradientOverlayColor(ContextCompat.getColor(this, R.color.colorPrimary), alpha > 1 ? 1 : alpha));
     }
 
@@ -82,6 +94,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
+
+        ImmersionBar.with(this)
+                .hideBar(BarHide.FLAG_SHOW_BAR)
+                .init();
+
+        int statusHeight = StatusBarTools.getStatusBarHeight(this);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+            CollapsingToolbarLayout.LayoutParams lp = (CollapsingToolbarLayout.LayoutParams) mTbToolbar.getLayoutParams();
+            lp.topMargin = statusHeight;
+            mTbToolbar.setLayoutParams(lp);
+        }
+
         List<Fragment> fragments = new ArrayList<Fragment>(3) {{
             add(new TestFragment());
             add(new TestFragment());

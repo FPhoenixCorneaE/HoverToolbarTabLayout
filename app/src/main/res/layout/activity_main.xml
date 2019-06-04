@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/ablAppBar"
@@ -68,7 +67,7 @@
             </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/tb_toolbar"
+                android:id="@+id/tbToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 app:contentInsetEnd="0dp"
